@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { Layout, Typography, Table, Tag, Space } from "antd";
 import { BreadCrumbs } from "./BreadCrumbs";
+import { CustomBtn } from "./support/CustomBtn";
 
 const { Content, Header } = Layout;
 const { Text } = Typography;
@@ -11,12 +12,16 @@ export function TestTable() {
 
     const [characterName, setCharacterName] = React.useState("");
 
-    React.useEffect(() => {
+    const getName = React.useCallback(() => {
         axios("https://swapi.dev/api/people/1/")
             .then(res => {
                 setCharacterName(res.data.name);
             });
     }, []);
+
+    React.useEffect(() => {
+      getName();
+    }, [getName]);
 
     const columns = [
         {
@@ -61,7 +66,6 @@ export function TestTable() {
           render: (text, record) => (
             <Space size="middle">
               <a>Invite {record.name}</a>
-              <a>Delete</a>
             </Space>
           ),
         },
@@ -98,9 +102,14 @@ export function TestTable() {
                 <Text>Данные</Text>
             </HeaderBlock>
             <div style={{ margin: "24px 0" }}>
-                Тут у нас имя: {characterName}
+                Автор: {characterName}
             </div>
-            <Table bordered={true} columns={columns} dataSource={data} />
+            <Table 
+              bordered={true} 
+              columns={columns} 
+              dataSource={data} 
+            />
+            <CustomBtn />
         </Container>
     )
 }
